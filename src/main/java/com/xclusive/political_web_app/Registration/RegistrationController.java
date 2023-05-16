@@ -4,15 +4,12 @@ import com.xclusive.political_web_app.Event.RegistrationCompleteEvent;
 import com.xclusive.political_web_app.Registration.Token.VerificationToken;
 import com.xclusive.political_web_app.Registration.Token.VerificationTokenRepository;
 import com.xclusive.political_web_app.Security.RegistrationDetailsService;
-import com.xclusive.political_web_app.User.User;
+import com.xclusive.political_web_app.User.AppUser;
 import com.xclusive.political_web_app.User.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/register")
@@ -28,9 +25,9 @@ public class RegistrationController {
 
     @PostMapping
     public String registerUser(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request){
-        User user = userService.registerUser(registrationRequest);
+        AppUser appUser = userService.registerUser(registrationRequest);
             //publish registration event
-            publisher.publishEvent(new RegistrationCompleteEvent(user,appUrl(request)));
+            publisher.publishEvent(new RegistrationCompleteEvent(appUser,appUrl(request)));
             return "Registration Successful, Please check your email to complete registration";
 
     }
@@ -39,7 +36,7 @@ public class RegistrationController {
     public String verifyEmail(@RequestParam("token") String token) {
 
         VerificationToken theToken = verificationTokenRepository.findByToken(token);
-        if(theToken.getUser().isEnabled()) {
+        if(theToken.getAppUser().isEnabled()) {
             return "Account already verified please login";
         }
         String result = userService.validateVerificationToken(token);

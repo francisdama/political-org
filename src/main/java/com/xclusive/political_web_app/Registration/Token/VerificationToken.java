@@ -1,6 +1,6 @@
 package com.xclusive.political_web_app.Registration.Token;
 
-import com.xclusive.political_web_app.User.User;
+import com.xclusive.political_web_app.User.AppUser;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -21,12 +21,12 @@ public class VerificationToken {
     private static final int Expiration_Time = 10;
     @Id
     @SequenceGenerator(
-            name = "member_id_sequence",
-            sequenceName = "member_id_sequence"
+            name = "confirmation_token_sequence",
+            sequenceName = "confirmation_token_sequence"
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "member_id_sequence"
+            generator = "confirmation_token_sequence"
     )
     private Integer id;
 
@@ -35,14 +35,14 @@ public class VerificationToken {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "FK_USER_VERIFY_TOKEN"))
-    private User user;
+            nullable = false)
+//            foreignKey = @ForeignKey(name = "FK_USER_VERIFY_TOKEN"))
+    private AppUser appUser;
 
-    public VerificationToken(User user, String token){
+    public VerificationToken(AppUser appUser, String token){
         super();
         this.token = token;
-        this.user = user;
+        this.appUser = appUser;
         this.expirationTime = CalculateExpirationDate(Expiration_Time);
 
     }

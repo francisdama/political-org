@@ -1,6 +1,5 @@
 package com.xclusive.political_web_app.User;
 
-import com.xclusive.political_web_app.Security.UserRegistrationDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,26 +9,26 @@ import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
-    private User user;
+    private AppUser appUser;
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetails(AppUser appUser) {
         super();
-        this.user = user;
+        this.appUser = appUser;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
+        return Collections.singleton(new SimpleGrantedAuthority(appUser.getRole()));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return appUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return appUser.getEmail();
     }
 
     @Override

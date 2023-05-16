@@ -12,12 +12,13 @@ import org.hibernate.annotations.NaturalId;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User {
-    @Id
+public class AppUser {
     @SequenceGenerator(
             name = "member_id_sequence",
-            sequenceName = "member_id_sequence"
+            sequenceName = "member_id_sequence",
+            allocationSize = 1
     )
+    @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "member_id_sequence"

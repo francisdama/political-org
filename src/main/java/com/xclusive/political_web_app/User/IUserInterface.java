@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserInterface {
-    List<User> getUsers();
+    List<AppUser> getUsers();
 
-    User registerUser(RegistrationRequest request);
+    AppUser registerUser(RegistrationRequest request);
 
-    Optional<User> findByEmail(String email);
+    Optional<AppUser> findByEmail(String email);
 
-    void saveVerificationTokenForUser(String verificationToken, User user);
+    void saveVerificationTokenForUser(String verificationToken, AppUser appUser);
 
     String validateVerificationToken(String token);
 }

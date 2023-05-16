@@ -1,6 +1,6 @@
 package com.xclusive.political_web_app.Event;
 
-import com.xclusive.political_web_app.User.User;
+import com.xclusive.political_web_app.User.AppUser;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
@@ -8,12 +8,12 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 @Setter
 public class RegistrationCompleteEvent extends ApplicationEvent {
-    private User user;
+    private AppUser appUser;
     private String applicationUrl;
 
-    public RegistrationCompleteEvent(User user, String applicationUrl) {
-        super(user);
-        this.user = user;
+    public RegistrationCompleteEvent(AppUser appUser, String applicationUrl) {
+        super(appUser);
+        this.appUser = appUser;
         this.applicationUrl = applicationUrl;
     }
 }

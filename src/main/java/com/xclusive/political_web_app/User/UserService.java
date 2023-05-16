@@ -21,7 +21,7 @@ public class UserService implements IUserInterface{
 
     private final VerificationTokenRepository verificationTokenRepository;
     @Override
-    public List<User> getUsers() {
+    public List<AppUser> getUsers() {
         return userRepository.findAll();
     }
 
@@ -29,17 +29,17 @@ public class UserService implements IUserInterface{
         return userRepository.checkUserPasswordByEmail(email);
     }
 
-    public  User getUserDetailsByEmail(String email){
+    public AppUser getUserDetailsByEmail(String email){
         return userRepository.getUserDetailsByEmail(email);
     }
 
     @Override
-    public User registerUser(RegistrationRequest request) {
-        Optional<User> user = userRepository.findByEmail(request.email());
+    public AppUser registerUser(RegistrationRequest request) {
+        Optional<AppUser> user = userRepository.findByEmail(request.email());
         if (user.isPresent()){
             throw new UserAlreadyExistException("User with email " + request.email() + " Already exist");
         }
-        var newUser = new User();
+        var newUser = new AppUser();
         newUser.setFirstname(request.firstname());
         newUser.setLastname(request.lastname());
         newUser.setEmail(request.email());
@@ -49,14 +49,14 @@ public class UserService implements IUserInterface{
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<AppUser> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public void saveVerificationTokenForUser(String verificationToken, User user) {
+    public void saveVerificationTokenForUser(String verificationToken, AppUser appUser) {
         VerificationToken token
-                = new VerificationToken(user, verificationToken);
+                = new VerificationToken(appUser, verificationToken);
 
         verificationTokenRepository.save(token);
     }
@@ -70,7 +70,7 @@ public class UserService implements IUserInterface{
             return "invalid verification token";
         }
 
-        User user = verificationToken.getUser();
+        AppUser appUser = verificationToken.getAppUser();
         Calendar cal = Calendar.getInstance();
 
         if ((verificationToken.getExpirationTime().getTime()
@@ -79,8 +79,8 @@ public class UserService implements IUserInterface{
             return "verification token expired";
         }
 
-        user.setEnabled(true);
-        userRepository.save(user);
+        appUser.setEnabled(true);
+        userRepository.save(appUser);
         return "valid";
     }
 }
