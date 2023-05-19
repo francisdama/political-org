@@ -21,13 +21,26 @@ public class UserController {
     private final RegistrationDetailsService userDetailService;
 
     @GetMapping
-    public List<AppUser> getUsers(@RequestBody AllUserModel model){
+    public UsersResponsePojo getData(@RequestBody AllUserModel model){
+
         List<AppUser> allAppUsers = new ArrayList<>();
+        UsersResponsePojo response = new UsersResponsePojo ();
         UserDetails details = userDetailService.loadUserByUsername(model.getEmail());
         if (details != null && details.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ADMIN")) && details.isEnabled()) {
             allAppUsers = userService.getUsers();
+            response.setSuccess(true);
+            response.setData(allAppUsers);
         }
-        return allAppUsers;
+        return response;
     }
+//    public List<AppUser> getUsers(@RequestBody AllUserModel model){
+//        List<AppUser> allAppUsers = new ArrayList<>();
+//        UserDetails details = userDetailService.loadUserByUsername(model.getEmail());
+//        if (details != null && details.getAuthorities().stream()
+//                .anyMatch(a -> a.getAuthority().equals("ADMIN")) && details.isEnabled()) {
+//            allAppUsers = userService.getUsers();
+//        }
+//        return allAppUsers;
+//    }
 }
